@@ -15,8 +15,7 @@ router.get("/test", async ctx => {
 router.post("/register", async ctx => {
 
     const findResult = await User.find({email:ctx.request.body.email})
-    console.log(findResult)
-    if(findResult>0){
+    if(findResult.length>0){
         ctx.status = 500;
         ctx.body = {email:"邮箱已被占用"}
     }else{
@@ -27,12 +26,11 @@ router.post("/register", async ctx => {
             password:tools.enBcrypt(ctx.request.body.password),
         })
         await newUser.save().then( user=>{
-            // ctx.body = user
+            ctx.body = user
         }).catch(err=>{
             console.log(err)
         })
-        //
-        ctx.body = newUser
+        // ctx.body = newUser
     }
 })
 module.exports = router.routes()
